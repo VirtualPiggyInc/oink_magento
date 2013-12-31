@@ -1,4 +1,4 @@
-oink_magento
+Oink Magento Modules
 ============
 
 #Overview
