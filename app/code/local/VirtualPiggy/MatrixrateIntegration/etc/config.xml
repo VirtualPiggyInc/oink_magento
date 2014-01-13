@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <VirtualPiggy_MatrixrateIntegration>
+            <version>1.0.0.0</version>
+        </VirtualPiggy_MatrixrateIntegration>
+    </modules>
+    <global>
+        <models>
+            <virtualpiggy_matrixrate_integration>
+                <class>VirtualPiggy_MatrixrateIntegration_Model</class>
+            </virtualpiggy_matrixrate_integration>
+        </models>
+        <events>
+            <virtualpiggy_after_set_shipping_method>
+                <observers>
+                    <virtualpiggy_matrixrate_integration>
+                        <class>virtualpiggy_matrixrate_integration/observer</class>
+                        <method>virtualpiggyAfterSetShippingMethod</method>
+                    </virtualpiggy_matrixrate_integration>
+                </observers>
+            </virtualpiggy_after_set_shipping_method>
+        </events>
+    </global>
+    <frontend>
+    </frontend>
+    <default>
+        <virtualpiggy>
+            <matrixrate>
+                <shipping_methods>
+                    <expedited>
+                        <method>FedEx Expedited (2-3 Day) (w/ Tracking)</method>
+                    </expedited>
+                    <ground>
+                        <method>FedEx Ground (w/ Tracking)</method>
+                    </ground>
+                    <overnight>
+                        <method>FedEx Overnight (w/ Tracking)</method>
+                    </overnight>
+                    <standard>
+                        <method>Standard USPS (w/ Delivery Confirmation)</method>
+                    </standard>
+                </shipping_methods>
+            </matrixrate>
+        </virtualpiggy>
+    </default>
+</config>

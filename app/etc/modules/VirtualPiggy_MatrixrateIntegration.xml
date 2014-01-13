@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <VirtualPiggy_MatrixrateIntegration>
+            <active>false</active>
+            <codePool>local</codePool>
+            <depends>
+                <VirtualPiggy_VirtualPiggy />
+                <Auctionmaid_Matrixrate />
+            </depends>
+        </VirtualPiggy_MatrixrateIntegration>
+    </modules>
+</config>
