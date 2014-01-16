@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<config>
-    <modules>
-        <VirtualPiggy_VirtualPiggy>
-            <active>true</active>
-            <codePool>local</codePool>
-        </VirtualPiggy_VirtualPiggy>
-    </modules>
-</config>
