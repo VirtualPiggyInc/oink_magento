@@ -233,7 +233,7 @@
         <payment>
             <groups>
                 <virtualpiggy translate="label" module="virtualpiggy">
-                    <label>Virtual Piggy</label>
+                    <label>Oink</label>
                     <frontend_type>text</frontend_type>
                     <sort_order>10</sort_order>
                     <show_in_default>1</show_in_default>

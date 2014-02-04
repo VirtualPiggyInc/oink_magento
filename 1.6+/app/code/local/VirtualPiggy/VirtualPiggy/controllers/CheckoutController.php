@@ -17,7 +17,7 @@ class VirtualPiggy_VirtualPiggy_CheckoutController
             Mage::getSingleton("core/session")->addError($this->__("You need to have products in your cart."));
             $this->_redirect("checkout/cart/index");
         } elseif (!Mage::helper("virtualpiggy")->isUserLogged()) {
-            Mage::getSingleton("core/session")->addError($this->__("You need to be logged in Virtual Piggy."));
+            Mage::getSingleton("core/session")->addError($this->__("You need to be logged in Oink."));
             $this->_redirect("checkout/cart/index");
         } else {
             if ($this->_isOrderReadyForConfirmation()) {

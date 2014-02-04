@@ -17,7 +17,7 @@ class VirtualPiggy_VirtualPiggy_Block_Checkout_ParentConfirmation_Payment
                 }
             }
         }
-        throw new Exception("Parent has no payment accounts available/activated. Please refer to VirtualPiggy's dashboard and configure/activate one.");
+        throw new Exception("Parent has no payment accounts available/activated. Please refer to Oink's dashboard and configure/activate one.");
         return;
     }
 }

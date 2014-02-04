@@ -13,12 +13,12 @@ class VirtualPiggy_VirtualPiggy_Block_Adminhtml_Sales_Order_View_Tab_VirtualPigg
      */
     public function getTabLabel()
     {
-        return Mage::helper('virtualpiggy')->__('Virtual Piggy');
+        return Mage::helper('virtualpiggy')->__('Oink');
     }
 
     public function getTabTitle()
     {
-        return Mage::helper('virtualpiggy')->__('Virtual Piggy');
+        return Mage::helper('virtualpiggy')->__('Oink');
     }
 
     public function canShowTab()
