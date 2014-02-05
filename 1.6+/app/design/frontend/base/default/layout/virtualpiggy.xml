@@ -29,7 +29,7 @@
             </block>
         </reference>
     </virtualpiggy_checkout_index>
-    
+
     <virtualpiggy_checkout_parentconfirmation>
         <reference name="content">
             <block type="virtualpiggy/checkout_parentConfirmation" template="virtualpiggy/checkout/parent_confirmation.phtml" name="virtualpiggy.checkout.parentConfirmation" as="parentConfirmation" >
@@ -38,17 +38,18 @@
             </block>
         </reference>
     </virtualpiggy_checkout_parentconfirmation>
-    
+
     <checkout_cart_index>
         <reference name="checkout.cart.methods">
             <block type="virtualpiggy/checkout_button" template="virtualpiggy/checkout/button/form.phtml" name="virtualpiggy_login" />
-           <block type="virtualpiggy/checkout_button" template="virtualpiggy/checkout/cart/button.phtml" name="virtualpiggy_checkoutbutton" before="checkout.cart.methods.multishipping" />            
+            <block type="virtualpiggy/checkout_button" template="virtualpiggy/checkout/cart/button.phtml" name="virtualpiggy_checkoutbutton" before="checkout.cart.methods.multishipping" />
         </reference>
     </checkout_cart_index>
-    
+
     <checkout_onepage_index>
         <reference name="content">
             <block type="virtualpiggy/checkout_button" template="virtualpiggy/checkout/button/form.phtml" name="virtualpiggy_login" />
+            <block type="virtualpiggy/checkout_button" template="virtualpiggy/checkout/button.phtml" name="virtualpiggy_checkoutbutton" />
         </reference>
     </checkout_onepage_index>
 </layout>

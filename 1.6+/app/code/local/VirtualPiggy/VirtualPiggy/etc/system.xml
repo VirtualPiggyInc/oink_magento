@@ -101,15 +101,22 @@
                     <show_in_store>1</show_in_store>
                     <fields>
                         <oink_radio translate="label">
-                            <label>Checkout Type</label>                     
+                            <label>Checkout Type</label>
                             <frontend_type>select</frontend_type>
                             <source_model>virtualpiggy/admin_checkout</source_model>
                             <sort_order>1</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                        </oink_radio>               
-
+                        </oink_radio>
+                        <oink_cart_checkout_margin_top>
+                            <label>Oink Cart Checkout Button Top Margin</label>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>In px</comment>
+                        </oink_cart_checkout_margin_top>
                     </fields>
                 </checkoutbutton>
                 <messages>
@@ -201,21 +208,21 @@
                         </payment_not_accepted>
                     </fields>
                 </messages>
-                <extra>  
-                    <label>Extra configuration</label>  
-                    <sort_order>200</sort_order>  
-                    <show_in_default>1</show_in_default>  
-                    <show_in_website>1</show_in_website>  
-                    <show_in_store>1</show_in_store>  
-                    <fields>  
-                        <show_payment_method translate="label">  
+                <extra>
+                    <label>Extra configuration</label>
+                    <sort_order>200</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <show_payment_method translate="label">
                             <label>Show payment method for</label>
-                            <frontend_type>select</frontend_type>  
+                            <frontend_type>select</frontend_type>
                             <source_model>virtualpiggy/admin_enablestatus</source_model>
-                            <sort_order>10</sort_order>  
-                            <show_in_default>1</show_in_default>  
-                            <show_in_website>1</show_in_website>  
-                            <show_in_store>1</show_in_store>  
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
                         </show_payment_method>
                         <two_steps_authorization translate="label">
                             <label>Use two steps authorization</label>
@@ -226,8 +233,8 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </two_steps_authorization>
-                    </fields>  
-                </extra>  
+                    </fields>
+                </extra>
             </groups>
         </virtualpiggy>
         <payment>
