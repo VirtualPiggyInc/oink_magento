@@ -40,7 +40,7 @@
         if(oinkCheckoutType == '2' || oinkCheckoutType == '0') {
             var radioOptionHeight = getRadioOptionHeight();
             // 1. Oink Radio Button
-            var oinkRadio = '<li class="control"><input type="radio" name="checkout_method" id="lologin:virtualpiggy" value="virtualpiggy" class="radio"> <label for="login:virtualpiggy"><img src="https://cdn.virtualpiggy.com/public/images/checkout-radio-68x20.png" height="'+radioOptionHeight+'px" style="vertical-align:middle;" /></label>';
+            var oinkRadio = '<li class="control"><input type="radio" name="checkout_method" id="lologin:virtualpiggy" value="virtualpiggy" class="radio"> <label for="login:virtualpiggy"><img src="https://cdn.virtualpiggy.com/public/images/checkout-radio-68x20.png" height="'+radioOptionHeight+'px" style="vertical-align:middle;" /></label></li>';
             $('login:register').up(0).insert({
                 before: oinkRadio
             });
