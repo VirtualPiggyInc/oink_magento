@@ -49,7 +49,6 @@
     <checkout_onepage_index>
         <reference name="content">
             <block type="virtualpiggy/checkout_button" template="virtualpiggy/checkout/button/form.phtml" name="virtualpiggy_login" />
-            <block type="virtualpiggy/checkout_button" template="virtualpiggy/checkout/button.phtml" name="virtualpiggy_checkoutbutton" />
         </reference>
     </checkout_onepage_index>
 </layout>

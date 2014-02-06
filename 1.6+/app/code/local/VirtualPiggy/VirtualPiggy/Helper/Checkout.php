@@ -38,6 +38,12 @@ class VirtualPiggy_VirtualPiggy_Helper_Checkout
      */
     const ENABLE_CODE_REGISTERED_USERS = "2";
     /**
+     * Enabled code for All Guest Users
+     *
+     * @var string
+     */
+    const ENABLE_CODE_GUEST_USERS = "3";
+    /**
      * Enabled code for All Registered Users
      *
      * @var string
@@ -68,20 +74,35 @@ class VirtualPiggy_VirtualPiggy_Helper_Checkout
         $quoteCheckoutMethod = $this->getQuote()->getCheckoutMethod();
         return (
             $quoteCheckoutMethod == Mage_Sales_Model_Quote::CHECKOUT_METHOD_REGISTER
-                ||
-                $quoteCheckoutMethod == Mage_Sales_Model_Quote::CHECKOUT_METHOD_LOGIN_IN
+            ||
+            $quoteCheckoutMethod == Mage_Sales_Model_Quote::CHECKOUT_METHOD_LOGIN_IN
         );
     }
 
+    /**
+     * @return bool
+     */
+    public function isCheckoutWithGuest()
+    {
+        $quoteCheckoutMethod = $this->getQuote()->getCheckoutMethod();
+        return (
+            $quoteCheckoutMethod != Mage_Sales_Model_Quote::CHECKOUT_METHOD_REGISTER
+            &&
+            $quoteCheckoutMethod != Mage_Sales_Model_Quote::CHECKOUT_METHOD_LOGIN_IN
+        );
+    }
+
+
     public function isEnabled()
     {
-        $config = Mage::getStoreConfig("virtualpiggy/extra/show_payment_method");
+        $config = Mage::getStoreConfig("virtualpiggy/checkoutbutton/show_payment_method");
         $enabled = (
             ($config == self::ENABLE_CODE_ALL_USERS)
-                ||
-                ($config == self::ENABLE_CODE_REGISTERED_USERS
-                    && $this->isCheckoutWithRegistered()
-                )
+            ||
+            ($config == self::ENABLE_CODE_REGISTERED_USERS
+                && $this->isCheckoutWithRegistered()
+            ) || ($config == self::ENABLE_CODE_GUEST_USERS
+                && $this->isCheckoutWithGuest())
         );
 
         return $enabled;
@@ -89,17 +110,19 @@ class VirtualPiggy_VirtualPiggy_Helper_Checkout
 
     public function isTwoStepsAuthorizationEnabled()
     {
-        $configShow = Mage::getStoreConfig("virtualpiggy/extra/show_payment_method");
-        $configTwoSteps = Mage::getStoreConfig("virtualpiggy/extra/two_steps_authorization");
+        $configShow = Mage::getStoreConfig("virtualpiggy/checkoutbutton/show_payment_method");
+        $configTwoSteps = Mage::getStoreConfig("virtualpiggy/merchant_info/two_steps_authorization");
 
         $enabled = (
             (
-                ($configShow == self::ENABLE_CODE_ALL_USERS)
-                    ||
-                    ($configShow == self::ENABLE_CODE_REGISTERED_USERS)
+                ($configShow = self::ENABLE_CODE_ALL_USERS)
+                ||
+                ($configShow == self::ENABLE_CODE_REGISTERED_USERS)
+                ||
+                ($configShow == self::ENABLE_CODE_GUEST_USERS)
             )
-                &&
-                ($configTwoSteps == 1)
+            &&
+            ($configTwoSteps == 1)
         );
 
         return $enabled;
@@ -286,7 +309,7 @@ class VirtualPiggy_VirtualPiggy_Helper_Checkout
     }
 
     /**
-     * 
+     *
      * @param int $orderId  The id of the magento order
      * @param string $field
      * @return VirtualPiggy_VirtualPiggy_Model_Order

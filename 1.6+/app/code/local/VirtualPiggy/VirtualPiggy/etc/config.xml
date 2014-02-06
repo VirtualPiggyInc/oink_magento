@@ -171,11 +171,13 @@
                 <ParentServiceEndpointAddressWsdl>https://development.virtualpiggy.com/services/JSON/ParentService.svc?wsdl</ParentServiceEndpointAddressWsdl>
                 <MerchantIdentifier>a1d2e935-7f4d-4c70-8dfb-f0e6cace5774</MerchantIdentifier>
                 <APIkey>gadgetboom123</APIkey>
+                <two_steps_authorization>0</two_steps_authorization>
                 <Currency>USD</Currency>
                 <DefaultShipmentMethod>Delivery</DefaultShipmentMethod>
                 <order_expiration_time>5</order_expiration_time>
             </merchant_info>
             <checkoutbutton>
+                <show_payment_method>0</show_payment_method>
                 <button_image>Button_LG5.png</button_image>
                 <oink_cart_checkout_margin_top>5</oink_cart_checkout_margin_top>
             </checkoutbutton>
@@ -191,10 +193,6 @@
                 <parent_configuration>Please make sure you configure your guest children and payment accounts in the Oink system</parent_configuration>
                 <payment_not_accepted>The payment type associated with your account is not accepted.</payment_not_accepted>
             </messages>
-            <extra>
-                <show_payment_method>0</show_payment_method>
-                <two_steps_authorization>0</two_steps_authorization>
-            </extra>
         </virtualpiggy>
         <payment>
             <virtualpiggy>
