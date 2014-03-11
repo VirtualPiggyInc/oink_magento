@@ -3,6 +3,8 @@
 "Cart XML","Cart XML"
 "Transaction Response","Transaction Response"
 "Approval Callback","Approval Callback"
+"This transaction was rejected by the parent","This transaction was rejected by the parent"
+"This transaction was approved by the parent","This transaction was approved by the parent"
 "Test Connection","Test Connection"
 "Successful! Test again?","Successful! Test again?"
 "Connection failed! Test again?","Connection failed! Test again?"

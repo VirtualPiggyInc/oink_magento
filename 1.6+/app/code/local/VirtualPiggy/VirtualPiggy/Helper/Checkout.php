@@ -52,6 +52,7 @@ class VirtualPiggy_VirtualPiggy_Helper_Checkout
 
     const ORDER_STATUS_APPROVAL_PENDING = 0;
     const ORDER_STATUS_APPROVED = 1;
+    const ORDER_STATUS_REJECTED = -1;
 
     protected $_order;
     protected $_virtualPiggyOrder;
@@ -347,18 +348,19 @@ class VirtualPiggy_VirtualPiggy_Helper_Checkout
 
             $invoice = Mage::getModel('sales/service_order', $order)->prepareInvoice();
 
-            // TODO
-            //$this->_fillInvoiceWithItems($invoice, $order);
-
             if ($this->isTwoStepsAuthorizationEnabled()) {
                 $invoice->setRequestedCaptureCase(Mage_Sales_Model_Order_Invoice::NOT_CAPTURE);
-                $order->getPayment()->setIsTransactionPending(true);
+                if($invoice->getOrder()->getState() != Mage_Sales_Model_Order::STATE_CANCELED) {
+                    $order->getPayment()->setIsTransactionPending(true);
+                }
             } else {
                 $invoice->setRequestedCaptureCase(Mage_Sales_Model_Order_Invoice::CAPTURE_ONLINE);
             }
 
             $invoice->register();
-            $invoice->getOrder()->setIsInProcess(true);
+            if($invoice->getOrder()->getState() != Mage_Sales_Model_Order::STATE_CANCELED) {
+                $invoice->getOrder()->setIsInProcess(true);
+            }
 
             $transactionSave = Mage::getModel('core/resource_transaction')
                 ->addObject($invoice)
@@ -370,8 +372,10 @@ class VirtualPiggy_VirtualPiggy_Helper_Checkout
             Mage::helper("virtualpiggy")->log("OrderId: " . $orderId . " - " . $e->getMessage(), "errorCreatingInvoice");
         }
 
-        $order->setStatus(Mage_Sales_Model_Order::STATE_PROCESSING);
-        $order->save();
+        if($order->getState() != Mage_Sales_Model_Order::STATE_CANCELED) {
+            $order->setStatus(Mage_Sales_Model_Order::STATE_PROCESSING);
+            $order->save();
+        }
     }
 
     /*

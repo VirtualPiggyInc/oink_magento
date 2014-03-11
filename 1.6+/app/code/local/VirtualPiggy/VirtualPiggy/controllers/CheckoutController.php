@@ -84,9 +84,6 @@ class VirtualPiggy_VirtualPiggy_CheckoutController
             $cart = $vpCheckoutHelper->getVirtualPiggyCart();
             $result = $vpCheckoutHelper->sendCartToVirtualPiggy($cart);
 
-            /*
-             * TODO: Review. Should we be saving all raw xml response from Virtual Piggy to database?
-             */
             Mage::helper("virtualpiggy")->log($result, "resultOfProcessTransaction");
             if ((bool)$result->Status) {
                 $this->_placeOrder();
@@ -101,7 +98,6 @@ class VirtualPiggy_VirtualPiggy_CheckoutController
 
                 $this->getCheckout()->clear();
 
-                // TODO fix this!
                 $originalOrder = Mage::getModel('sales/order')->load($order->getOrderId());
 
                 if ($result->TransactionStatus == VirtualPiggy_VirtualPiggy_Helper_Checkout::APPROVAL_PENDING_CODE) {
@@ -114,7 +110,7 @@ class VirtualPiggy_VirtualPiggy_CheckoutController
                 } else {
                     $message = Mage::getStoreConfig("virtualpiggy/messages/success_transaction");
                     $vpCheckoutHelper->completeOrder($order);
-                	$originalOrder->sendNewOrderEmail();
+                    $originalOrder->sendNewOrderEmail();
 
                     $originalOrder->setVirtualPiggyStatus(
                         VirtualPiggy_VirtualPiggy_Helper_Checkout::ORDER_STATUS_APPROVED
@@ -148,7 +144,7 @@ class VirtualPiggy_VirtualPiggy_CheckoutController
     protected function _isOrderReadyForConfirmation()
     {
         return Mage::helper("virtualpiggy")->getUserType() == VirtualPiggy_VirtualPiggy_Model_User::USER_CODE_TYPE_PARENT
-            && !(bool)Mage::getSingleton("customer/session")->getParentConfirmation();
+        && !(bool)Mage::getSingleton("customer/session")->getParentConfirmation();
     }
 
     protected function _placeOrder()
@@ -199,6 +195,8 @@ class VirtualPiggy_VirtualPiggy_CheckoutController
     {
         $params = $this->getRequest()->getParams();
         $transactionId = $params["TransactionIdentifier"];
+        if(!isset($transactionId) && isset($params['id']))
+            $transactionId = $params['id'];
         Mage::helper("virtualpiggy")->log($params, "receivedCallbackMessage");
         if ($transactionId) {
             /**
@@ -210,18 +208,32 @@ class VirtualPiggy_VirtualPiggy_CheckoutController
             if ($order->getId()) {
                 $order->addAdditionalInformation("parentApproval", $params);
 
-                // TODO fix this!
                 $originalOrder = Mage::getModel('sales/order')->load($order->getOrderId());
 
-                $originalOrder->setData(
-                    'virtual_piggy_status',
-                    VirtualPiggy_VirtualPiggy_Helper_Checkout::ORDER_STATUS_APPROVED
-                );
-                $originalOrder->sendNewOrderEmail();
+                if(isset($params['Status']) && $params['Status'] == 'Rejected') {
+                    $originalOrder->setData(
+                        'virtual_piggy_status',
+                        VirtualPiggy_VirtualPiggy_Helper_Checkout::ORDER_STATUS_REJECTED
+                    );
+                    $originalOrder->setState(Mage_Sales_Model_Order::STATE_CANCELED, Mage_Sales_Model_Order::STATE_CANCELED,
+                        $this->__('This transaction was rejected by the parent'))->save();
+
+                    if($originalOrder->canCancel()) {
+                        $originalOrder->cancel()->save();
+                    }
+                }
+                else if(isset($params['Status']) && $params['Status'] == 'Processed') {
+                    $originalOrder->setData(
+                        'virtual_piggy_status',
+                        VirtualPiggy_VirtualPiggy_Helper_Checkout::ORDER_STATUS_APPROVED
+                    );
+                    $originalOrder->setState(Mage_Sales_Model_Order::STATE_PROCESSING, Mage_Sales_Model_Order::STATE_PROCESSING,
+                        $this->__('This transaction was approved by the parent'))->save();
+                    $originalOrder->sendNewOrderEmail();
+                }
 
                 $originalOrder->save();
 
-                // TODO is completOrder?
                 $checkoutHelper->completeOrder($order);
             }
         }

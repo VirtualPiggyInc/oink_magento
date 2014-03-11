@@ -27,6 +27,7 @@
             <sales>
                 <rewrite>
                     <order>VirtualPiggy_VirtualPiggy_Model_Sales_Order</order>
+                    <order_payment>VirtualPiggy_VirtualPiggy_Model_Sales_Order_Payment</order_payment>
                 </rewrite>
             </sales>
         </models>
