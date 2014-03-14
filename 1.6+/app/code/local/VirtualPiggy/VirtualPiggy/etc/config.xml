@@ -2,7 +2,7 @@
 <config>
     <modules>
         <VirtualPiggy_VirtualPiggy>
-            <version>3.0.4</version>
+            <version>3.0.5</version>
         </VirtualPiggy_VirtualPiggy>
     </modules>
     <global>
