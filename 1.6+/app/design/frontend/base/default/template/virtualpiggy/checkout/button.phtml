@@ -15,11 +15,11 @@
     // 6. use admin (config) for Oink image ->
 
 
-
+	var vp_onepageclick = null;
     document.observe('dom:loaded', function(){
 
         // 2. Save "Onepage Checkout(Magento)" onclick "function"
-        var onepageclick = $('onepage-guest-register-button').onclick;
+        vp_onepageclick = $('onepage-guest-register-button').onclick;
 
 
         // 4. If "Allow Guest Checkout" enabled, add Oink "radio" select and replace "onepage" guest with "oink"
@@ -63,7 +63,7 @@
             virtualPiggyLoginForm.toggleTooltip();
         }
         else {
-            onepageclick();
+            vp_onepageclick();
         }
     }
 
