@@ -13,7 +13,7 @@ class Oink_Oink_Block_Rewrite_Checkout_Onepage_Login extends Mage_Checkout_Block
      */
     public function _toHtml()
     {
-        Mage::getSingleton("customer/session")->unsParentConfirmation();
+        Mage::getSingleton("customer/session")->unsParentConfirm();
         $button=Mage::helper("oink")->getCheckoutButtonHtml(array("print_form"=>true));
         return parent::_toHtml().$button;
     }

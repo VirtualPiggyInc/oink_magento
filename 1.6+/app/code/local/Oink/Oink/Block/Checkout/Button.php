@@ -47,7 +47,7 @@ class Oink_Oink_Block_Checkout_Button
      */
     public function getImageUrl()
     {
-	    return "https://cdn.oink.com/public/images/checkout-150x49.png";
+	    return "https://cdn.virtualpiggy.com/public/images/checkout-150x49.png";
 
     }
     /**

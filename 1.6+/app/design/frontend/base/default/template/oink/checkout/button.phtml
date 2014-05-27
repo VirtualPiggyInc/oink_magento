@@ -30,13 +30,13 @@
             // Merchant selected (2) "Radio Select Only"
             if(oinkCheckoutType == '1' || oinkCheckoutType == '0') {
                 var continueBtnHeight = $('onepage-guest-register-button').getHeight();
-                var oinkCheckoutBtn = '<a href="<?php echo $this->getCheckoutUrl() ?>" id="oink-checkout-button" onclick="return oinkLoginForm.toggleTooltip()" class="<?php echo $this->getCssClass() ?>"><img src="https://cdn.oink.com/public/images/checkout-145x42.png" style="height: '+continueBtnHeight+'px" /></a>';
+                var oinkCheckoutBtn = '<a href="<?php echo $this->getCheckoutUrl() ?>" id="oink-checkout-button" onclick="return oinkLoginForm.toggleTooltip()" class="<?php echo $this->getCssClass() ?>"><img src="https://cdn.virtualpiggy.com/public/images/checkout-145x42.png" style="height: '+continueBtnHeight+'px" /></a>';
                 $('onepage-guest-register-button').up(0).insert(oinkCheckoutBtn);
             }
             if(oinkCheckoutType == '2' || oinkCheckoutType == '0') {
                 var radioOptionHeight = getRadioOptionHeight();
                 // 1. Oink Radio Button
-                var oinkRadio = '<li class="control"><input type="radio" name="checkout_method" id="lologin:oink" value="oink" class="radio"> <label for="login:oink"><img src="https://cdn.oink.com/public/images/checkout-radio-68x20.png" height="'+radioOptionHeight+'px" style="vertical-align:middle;" /></label></li>';
+                var oinkRadio = '<li class="control"><input type="radio" name="checkout_method" id="lologin:oink" value="oink" class="radio"> <label for="login:oink"><img src="https://cdn.virtualpiggy.com/public/images/checkout-radio-68x20.png" height="'+radioOptionHeight+'px" style="vertical-align:middle;" /></label></li>';
                 $('login:register').up(0).insert({
                     before: oinkRadio
                 });

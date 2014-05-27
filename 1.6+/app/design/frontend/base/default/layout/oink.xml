@@ -30,14 +30,14 @@
         </reference>
     </oink_checkout_index>
 
-    <oink_checkout_parentconfirmation>
+    <oink_checkout_parentconfirm>
         <reference name="content">
-            <block type="oink/checkout_parentConfirmation" template="oink/checkout/parent_confirmation.phtml" name="oink.checkout.parentConfirmation" as="parentConfirmation" >
-                <block type="oink/checkout_parentConfirmation_childrenSelector" template="oink/checkout/parent_confirmation/children_selector.phtml" name="oink.checkout.parentConfirmation.childrenSelector" as="childrenSelector" />
-                <block type="oink/checkout_parentConfirmation_payment" template="oink/checkout/parent_confirmation/payment.phtml" name="oink.checkout.parentConfirmation.payment" as="payment" />
+            <block type="oink/checkout_parentConfirm" template="oink/checkout/parent_confirm.phtml" name="oink.checkout.parentConfirm" as="parentConfirm" >
+                <block type="oink/checkout_parentConfirm_CSelect" template="oink/checkout/parent_confirm/c_select.phtml" name="oink.checkout.parentConfirm.CSelect" as="CSelect" />
+                <block type="oink/checkout_parentConfirm_payment" template="oink/checkout/parent_confirm/payment.phtml" name="oink.checkout.parentConfirm.payment" as="payment" />
             </block>
         </reference>
-    </oink_checkout_parentconfirmation>
+    </oink_checkout_parentconfirm>
 
     <checkout_cart_index>
         <reference name="checkout.cart.methods">
