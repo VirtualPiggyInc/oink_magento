@@ -24,7 +24,7 @@ class Oink_Oink_Test_Helper_Data extends EcomDev_PHPUnit_Test_Case
      * @test
      * @dataProvider dataProvider
      */
-    public function loginCorrectUser($user,$password)
+    public function goodLogin($user,$password)
     {
         $helper=$this->_helper;
         $result = $helper->authenticateChild($user, $password);
@@ -38,7 +38,7 @@ class Oink_Oink_Test_Helper_Data extends EcomDev_PHPUnit_Test_Case
      * @test
      * @dataProvider dataProvider
      */
-    public function loginIncorrectUser($user,$password)
+    public function badLogin($user,$password)
     {
         $helper=$this->_helper;
         $result = $helper->authenticateChild($user, $password);
@@ -52,7 +52,7 @@ class Oink_Oink_Test_Helper_Data extends EcomDev_PHPUnit_Test_Case
      * @test
      * @dataProvider dataProvider
      */
-    public function loginIncorrectUserMultipleTimes($user,$password)
+    public function badLoginMultipleTimes($user,$password)
     {
         $helper=$this->_helper;
         for($i=0;$i<11;$i++){

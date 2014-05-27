@@ -11,7 +11,7 @@ class Oink_Oink_Test_Controller_CheckoutController
      * @test
      * @dataProvider dataProvider
      */
-    public function loginCorrectUser($user,$password)
+    public function goodLogin($user,$password)
     {
         $this->getRequest()->setPost("user", $user);
         $this->getRequest()->setPost("password", $password);
@@ -28,7 +28,7 @@ class Oink_Oink_Test_Controller_CheckoutController
      * @test
      * @dataProvider dataProvider
      */
-    public function loginIncorrectUser($user,$password)
+    public function badLogin($user,$password)
     {
         $this->getRequest()->setPost("user", $user);
         $this->getRequest()->setPost("password", $password);
