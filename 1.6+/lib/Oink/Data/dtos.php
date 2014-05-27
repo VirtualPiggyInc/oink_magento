@@ -136,7 +136,7 @@ class dtoCredentials
 {
 
     var $userName;
-    var $password;
+    var $badLogin;
 }
 class dtoProfileInfo
 {

@@ -1,5 +1,5 @@
 <?php
-/* @var $this Oink_Oink_Block_Checkout_ParentConfirmation_ChildrenSelector */
+/* @var $this Oink_Oink_Block_Checkout_ParentConfirm_CSelect */
 $childrens = $this->getChildrens();
 ?>
 
@@ -21,7 +21,7 @@ $childrens = $this->getChildrens();
                                 <div class="field">
                                     <label for="children" class="required">This transaction is for</label>
                                     <div class="input-box">
-                                        <select name="children" id="childSelector" class="required-entry">
+                                        <select name="children" id="cSelect" class="required-entry">
                                             <option value="" ></option>
                                             <?php foreach ($childrens as $key => $children): ?>
                                                 <option value="<?php echo $children->getChildrenIdentifier() ?>"><?php echo $children->getName() ?></option>
