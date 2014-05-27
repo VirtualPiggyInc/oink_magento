@@ -20,72 +20,72 @@ class Oink_Oink_Test_Helper_Data extends EcomDev_PHPUnit_Test_Case
     /**
      *
      * @param string $user
-     * @param string $badLogin
+     * @param string $password
      * @test
      * @dataProvider dataProvider
      */
-    public function goodLogin($user,$badLogin)
+    public function loginCorrectUser($user,$password)
     {
         $helper=$this->_helper;
-        $result = $helper->authenticateChild($user, $badLogin);
-        $this->assertTrue((bool)$result,"The user and badLogin are correct, but the login fails.");
+        $result = $helper->authenticateChild($user, $password);
+        $this->assertTrue((bool)$result,"The user and password are correct, but the login fails.");
     }
     
     /**
      *
      * @param string $user
-     * @param string $badLogin
+     * @param string $password
      * @test
      * @dataProvider dataProvider
      */
-    public function loginIncorrectUser($user,$badLogin)
+    public function loginIncorrectUser($user,$password)
     {
         $helper=$this->_helper;
-        $result = $helper->authenticateChild($user, $badLogin);
-        $this->assertFalse($result,"The user and badLogin are incorrect, but the login success.");
+        $result = $helper->authenticateChild($user, $password);
+        $this->assertFalse($result,"The user and password are incorrect, but the login success.");
     }
     
     /**
      *
      * @param string $user
-     * @param string $badLogin
+     * @param string $password
      * @test
      * @dataProvider dataProvider
      */
-    public function loginIncorrectUserMultipleTimes($user,$badLogin)
+    public function loginIncorrectUserMultipleTimes($user,$password)
     {
         $helper=$this->_helper;
         for($i=0;$i<11;$i++){
-            $result = $helper->authenticateUser($user, $badLogin);
+            $result = $helper->authenticateUser($user, $password);
         }
-        $this->assertFalse($result,"The user and badLogin are incorrect, but the login success.");
+        $this->assertFalse($result,"The user and password are incorrect, but the login success.");
     }
     
     /**
      *
      * @param string $user
-     * @param string $badLogin
+     * @param string $password
      * @test
      * @dataProvider dataProvider
      */
-    public function getUserAddress($user,$badLogin)
+    public function getUserAddress($user,$password)
     {
         $helper=$this->_helper;
-        $helper->authenticateChild($user, $badLogin);
+        $helper->authenticateChild($user, $password);
         $children=Mage::helper("oink")->getUser();
         $address=$children->getAddress();
-        $this->assertEquals("",(string)$address->ErrorMessage,"The user and badLogin are correct, but the address have an error.");
+        $this->assertEquals("",(string)$address->ErrorMessage,"The user and password are correct, but the address have an error.");
     }
     
     /**
      *
      * @param string $user
-     * @param string $badLogin
+     * @param string $password
      * @test
      * @loadFixture
      * @dataProvider dataProvider
      */
-    public function processTransaction($user,$badLogin){
+    public function processTransaction($user,$password){
 		/*
 		 * Test not working
 		 * Test not obtaining same result as in normal magento process
@@ -93,7 +93,7 @@ class Oink_Oink_Test_Helper_Data extends EcomDev_PHPUnit_Test_Case
 		 * Will fix this when last phase of project is complete
 		 * */
         $helper=$this->_helper;
-        $helper->authenticateChild($user, $badLogin);
+        $helper->authenticateChild($user, $password);
         $quote=$helper->getQuote();
         $product1=Mage::getModel("catalog/product")->load(1);
         $product2=Mage::getModel("catalog/product")->load(2);

@@ -5,7 +5,7 @@
     interface IPaymentService {
 
         public function AddItemToMerchantExclusionList();
-        public function AuthenticateChild($name, $badLogin);
+        public function AuthenticateChild($name, $password);
         public function GetChildProfile($token);
         public function GetChildAddress($token);
         public function GetLoyaltyBalance($token);
@@ -33,7 +33,7 @@
         * Method to authenticate parnet or child and returns a token to use in subsequent calls
         * @return Object containing information about call status, the user type and the token
         */		
-         public function AuthenticateUser($name, $badLogin);
+         public function AuthenticateUser($name, $password);
         /**
         * Method to return parent address details
         * <param name="token">Parent Security Token</param>

@@ -3,10 +3,10 @@
         color:#1484c5;
         text-decoration: underline;
     }
-    #oinkParentConfirm select{
+    #oinkParentConfirmation select{
         margin-left:10px;
     }
-    #oinkParentConfirm{
+    #oinkParentConfirmation{
         font-size: 14px;
     }
     #paymentAccounts{
@@ -27,8 +27,8 @@
     <h1><?php echo $this->__('Oink Guest Checkout'); ?></h1>
 </div>
 <ol class="opc">
-    <form method="POST" action="<?php echo $this->getFormActionUrl() ?>" id="oinkParentConfirm" >
-        <?php echo $this->getChildHtml("cSelect") ?>
+    <form method="POST" action="<?php echo $this->getFormActionUrl() ?>" id="oinkParentConfirmation" >
+        <?php echo $this->getChildHtml("childrenSelector") ?>
         <?php echo $this->getChildHtml("payment") ?>
         
         <div class="buttons-set" id="billing-buttons-container">
@@ -39,6 +39,6 @@
 </ol>
 <script type="text/javascript" >
 //<![CDATA[
-    var oinkParentConfirm = new VarienForm('oinkParentConfirm', true);
+    var oinkParentConfirmation = new VarienForm('oinkParentConfirmation', true);
 //]]>
 </script>

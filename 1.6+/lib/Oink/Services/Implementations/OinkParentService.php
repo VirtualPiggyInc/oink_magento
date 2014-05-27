@@ -27,7 +27,7 @@ class OinkParentService implements IParentService{
             return $client;
     }
     
-    public function AuthenticateParent($username, $badLogin){
+    public function AuthenticateParent($username, $password){
         $result_dto = new dtoResultObject();
         $result_dto->ErrorMessage = "SOAP call not executed.";
         $result_dto->Status = false;
@@ -36,7 +36,7 @@ class OinkParentService implements IParentService{
             $client = $this->GetSoapClient();
             $params = array(
                 'userName' => $username,
-                'badLogin' => $badLogin,
+                'password' => $password,
             );
             $result = $client->AuthenticateParent($params);
             

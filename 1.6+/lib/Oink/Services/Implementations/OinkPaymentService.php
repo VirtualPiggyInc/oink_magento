@@ -51,11 +51,11 @@ class OinkPaymentService implements IPaymentService {
     }
 
     /**
-     * Authenticates a child based on username & badLogin.
+     * Authenticates a child based on username & password.
      * @return dtoResultObject The result object contains information for
      * the webservice call to AuthenticateChild
      */
-    public function AuthenticateChild($name, $badLogin) {
+    public function AuthenticateChild($name, $password) {
         $result_dto = new dtoResultObject();
         $result_dto->ErrorMessage = "SOAP call not executed.";
         $result_dto->Status = false;
@@ -64,7 +64,7 @@ class OinkPaymentService implements IPaymentService {
             $client = $this->GetSoapClient();
             $params = array(
                 'userName' => $name,
-                'badLogin' => $badLogin,
+                'password' => $password,
             );
             $result = $client->AuthenticateChild($params);
             $result_dto->ErrorMessage = $result->AuthenticateChildResult->ErrorMessage;
@@ -81,7 +81,7 @@ class OinkPaymentService implements IPaymentService {
      * Method to authenticate parnet or child and returns a token to use in subsequent calls
      * @return Object containing information about call status, the user type and the token
      */
-    public function AuthenticateUser($name, $badLogin) {
+    public function AuthenticateUser($name, $password) {
         $result_dto = new dtoResultObject();
         $result_dto->ErrorMessage = "SOAP call not executed.";
         $result_dto->Status = false;
@@ -90,7 +90,7 @@ class OinkPaymentService implements IPaymentService {
             $client = $this->GetSoapClient();
             $params = array(
                 'userName' => $name,
-                'badLogin' => $badLogin,
+                'password' => $password,
             );
             $result = $client->AuthenticateUser($params);
             $result_dto->ErrorMessage = $result->AuthenticateUserResult->ErrorMessage;

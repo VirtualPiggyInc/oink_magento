@@ -2,7 +2,7 @@
     #oink-login-container{
         position:relative;
     }
-    input[type=text], input[type=badLogin]
+    input[type=text], input[type=password]
     {
         height:25px;
         width:250px;
@@ -84,9 +84,9 @@
                             <input class="textBox required-entry" onkeypress="bindOinkLoginPost(event)" id="oink-login-userid" name="UserName" tabindex="2" type="text" placeholder="Username" />
                         </div>
                         <div align="center" style="padding-top:5px;">
-                            <input autocomplete="off" onkeypress="bindOinkLoginPost(event)" class="textBox required-entry" id="oink-login-badLogin" name="badLogin" tabindex="3" type="badLogin" placeholder="badLogin" />
+                            <input autocomplete="off" onkeypress="bindOinkLoginPost(event)" class="textBox required-entry" id="oink-login-password" name="Password" tabindex="3" type="password" placeholder="Password" />
                             <div class="opensans" style="font-size:10pt;color:#ff0000;" id="oink-errors-container">&nbsp;</div>
-                            <div><a href="https://users.oink.com/login/forgotbadLogin" target="_blank" style="font-size:10pt;color:#999;font-family:"helvetica neue regular";">Forgot badLogin?</a></div>
+                            <div><a href="https://users.oink.com/login/forgotpassword" target="_blank" style="font-size:10pt;color:#999;font-family:"helvetica neue regular";">Forgot Password?</a></div>
                         </div>
                     </form>
                 </div>
@@ -161,14 +161,14 @@
 
     oinkLoginForm.submit=function(){
         var user=$('oink-login-userid').value;
-        var badLogin=$('oink-login-badLogin').value;
+        var password=$('oink-login-password').value;
 
         if(this.validator && this.validator.validate()){
             new Ajax.Request("<?php echo $this->getLoginPostUrl() ?>",{
                 method:"post",
                 parameters:{
                     "user" : user,
-                    "badLogin" : badLogin
+                    "password" : password
                 },
 
                 onCreate:function() {

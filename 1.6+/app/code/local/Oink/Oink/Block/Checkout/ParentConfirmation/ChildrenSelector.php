@@ -3,7 +3,7 @@
  * @category    Oink
  * @package     Oink_Oink
  */
-class Oink_Oink_Block_Checkout_ParentConfirm_CSelect
+class Oink_Oink_Block_Checkout_ParentConfirmation_ChildrenSelector
         extends Mage_Core_Block_Template
 {
     public function getChildrens(){

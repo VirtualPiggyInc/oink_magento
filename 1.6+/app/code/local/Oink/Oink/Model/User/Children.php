@@ -13,16 +13,16 @@ class Oink_Oink_Model_User_Children
      * Authenticate child and get the the result 
      * 
      * @param string $user Oink account user
-     * @param string $badLogin Oink account badLogin
+     * @param string $password Oink account password
      * @return Oink_Oink_Model_Children
      */
-    public function login($user, $badLogin)
+    public function login($user, $password)
     {
         $paymentService = $this->_getHelper()->getOinkPaymentService();
         $credentials = Mage::helper("oink")->getDtoCredentials();
         $credentials->userName = $user;
-        $credentials->badLogin = $badLogin;
-        $auth = $paymentService->AuthenticateChild($credentials->userName, $credentials->badLogin);
+        $credentials->password = $password;
+        $auth = $paymentService->AuthenticateChild($credentials->userName, $credentials->password);
 		/*
 		 * When casting a string to bool php will consider empty strings false.
 		 * */

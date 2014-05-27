@@ -183,7 +183,7 @@
                 <oink_cart_checkout_margin_top>5</oink_cart_checkout_margin_top>
             </checkoutbutton>
             <messages>
-                <login_error>Invalid username or badLogin</login_error>
+                <login_error>Invalid username or password</login_error>
                 <max_login_attemps>Too many login attempts. Your account is locked for 10 minutes.</max_login_attemps>
                 <shipping_error>We are currently having trouble calculating your shipping. Please try again later.</shipping_error>
                 <approval_required>We are waiting to hear back from your parents. Thanks for using Oink.</approval_required>

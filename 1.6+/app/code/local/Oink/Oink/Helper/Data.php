@@ -22,10 +22,10 @@ class Oink_Oink_Helper_Data
      * Authenticate child and get the the result 
      * 
      * @param string $user Oink account user
-     * @param string $badLogin Oink account badLogin
+     * @param string $password Oink account password
      * @return bool|Oink_Oink_Model_Children
      */
-    public function authenticateChild($user, $badLogin)
+    public function authenticateChild($user, $password)
     {
         /*
          * magento requires a model for each entity
@@ -34,20 +34,20 @@ class Oink_Oink_Helper_Data
          * */
         $children = Mage::getModel("oink/user_children");
         Mage::getSingleton("customer/session")->setOinkUser($children);
-        return $children->login($user, $badLogin);
+        return $children->login($user, $password);
     }
 
     /**
      * Authenticate child and get the the result 
      * 
      * @param string $user Oink account user
-     * @param string $badLogin Oink account badLogin
+     * @param string $password Oink account password
      * @return bool|Oink_Oink_Model_Children
      */
-    public function authenticateUser($userName, $badLogin)
+    public function authenticateUser($userName, $password)
     {
         $user = Mage::getModel("oink/user");
-        $user=$user->login($userName, $badLogin);
+        $user=$user->login($userName, $password);
         Mage::getSingleton("customer/session")->setOinkUser($user);
         return $user;
     }

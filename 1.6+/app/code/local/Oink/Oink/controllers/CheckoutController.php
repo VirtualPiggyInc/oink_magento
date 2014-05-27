@@ -21,7 +21,7 @@ class Oink_Oink_CheckoutController
             $this->_redirect("checkout/cart/index");
         } else {
             if ($this->_isOrderReadyForConfirmation()) {
-                $this->_redirect("oink/checkout/parentConfirm");
+                $this->_redirect("oink/checkout/parentConfirmation");
             } else {
                 Mage::helper("oink/checkout")->populateQuote();
                 $this->loadLayout()
@@ -33,9 +33,9 @@ class Oink_Oink_CheckoutController
     /**
      * Parent Confirmation page
      */
-    public function parentConfirmAction()
+    public function parentConfirmationAction()
     {
-        Mage::getSingleton("customer/session")->unsParentConfirm();
+        Mage::getSingleton("customer/session")->unsParentConfirmation();
         try {
             $this->loadLayout()->renderLayout();
         } catch (Exception $e) {
@@ -51,10 +51,10 @@ class Oink_Oink_CheckoutController
     public function loginPostAction()
     {
         $user = $this->getRequest()->getPost("user");
-        $badLogin = $this->getRequest()->getPost("badLogin");
+        $password = $this->getRequest()->getPost("password");
         $loginResponse = array();
         try {
-            $loginResponse["response"] = (bool)Mage::helper("oink")->authenticateUser($user, $badLogin);
+            $loginResponse["response"] = (bool)Mage::helper("oink")->authenticateUser($user, $password);
 
         } catch (Exception $e) {
             if (strpos($e->getMessage(), "temporarily disabled") !== false) {
@@ -124,7 +124,7 @@ class Oink_Oink_CheckoutController
 
                 Mage::getSingleton("core/session")->addSuccess($message);
                 $path = "*/*/success";
-                Mage::getSingleton("customer/session")->unsParentConfirm();
+                Mage::getSingleton("customer/session")->unsParentConfirmation();
             } else {
                 $errorMessage = Mage::getSingleton("oink/errorHandler")->rewriteError($result->ErrorMessage);
                 Mage::getSingleton("core/session")->addError($errorMessage);
@@ -144,7 +144,7 @@ class Oink_Oink_CheckoutController
     protected function _isOrderReadyForConfirmation()
     {
         return Mage::helper("oink")->getUserType() == Oink_Oink_Model_User::USER_CODE_TYPE_PARENT
-        && !(bool)Mage::getSingleton("customer/session")->getParentConfirm();
+        && !(bool)Mage::getSingleton("customer/session")->getParentConfirmation();
     }
 
     protected function _placeOrder()
@@ -259,7 +259,7 @@ class Oink_Oink_CheckoutController
     /**
      * Process Parent Confirmation page
      */
-    public function processParentConfirmAction()
+    public function processParentConfirmationAction()
     {
         $params = $this->getRequest()->getParams();
         $errors = array();
@@ -273,7 +273,7 @@ class Oink_Oink_CheckoutController
             foreach ($errors as $error) {
                 Mage::getSingleton("core/session")->addError($error);
             }
-            $this->_redirect("*/*/parentConfirm");
+            $this->_redirect("*/*/parentConfirmation");
         } else {
             Mage::helper("oink")->getUser()->addData(array(
                 "selected_children" => $params["children"],
@@ -281,7 +281,7 @@ class Oink_Oink_CheckoutController
                 "deliver_to_children" => isset ($params["deliverToChildAddress"]),
                 "notify_children" => isset ($params["notifyChild"]),
             ));
-            Mage::getSingleton("customer/session")->setParentConfirm(true);
+            Mage::getSingleton("customer/session")->setParentConfirmation(true);
             $this->_redirect("*/*/index");
         }
     }

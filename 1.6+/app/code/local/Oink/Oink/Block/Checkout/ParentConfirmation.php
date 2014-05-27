@@ -3,7 +3,7 @@
  * @category    Oink
  * @package     Oink_Oink
  */
-class Oink_Oink_Block_Checkout_ParentConfirm
+class Oink_Oink_Block_Checkout_ParentConfirmation
         extends Mage_Core_Block_Template
 {
     /**
@@ -11,7 +11,7 @@ class Oink_Oink_Block_Checkout_ParentConfirm
      * @return  string
      */
     public function getFormActionUrl(){
-        return $this->getUrl("oink/checkout/processParentConfirm");
+        return $this->getUrl("oink/checkout/processParentConfirmation");
     }
 
 }

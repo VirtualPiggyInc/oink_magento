@@ -4,7 +4,7 @@
  */
     interface IParentService
     {
-        public function AuthenticateParent($username, $badLogin);
+        public function AuthenticateParent($username, $password);
         public function GetChildProfiles($token);
     }
 ?>
