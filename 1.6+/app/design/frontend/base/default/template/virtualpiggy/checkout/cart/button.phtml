@@ -1,5 +1,0 @@
-<?php /* @var $this VirtualPiggy_VirtualPiggy_Block_Checkout_Button */ ?>
-<?php
-if(Mage::helper("virtualpiggy/checkout")->isEnabled()) { ?>
-    <a href="<?php echo $this->getCheckoutUrl() ?>" id="virtualpiggy-cart-button" onclick="return virtualPiggyLoginForm.toggleTooltip()" class="<?php echo $this->getCssClass() ?>"><img src="https://cdn.virtualpiggy.com/public/images/checkout-145x42.png" /></a>
-<?php } ?>
