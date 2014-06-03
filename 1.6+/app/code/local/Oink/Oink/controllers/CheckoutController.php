@@ -175,7 +175,10 @@ class Oink_Oink_CheckoutController extends Mage_Core_Controller_Front_Action
 
     protected function _isShippingMethodSelected()
     {
-        return (bool)Mage::getSingleton('customer/session')->getShippingMethodSelected();
+		method = Mage::helper('oink/checkout')->getUser()->getData('shipping_method'));
+		if (isset(method))
+			return true;
+        return false;
     }
 
     protected function _placeOrder()
