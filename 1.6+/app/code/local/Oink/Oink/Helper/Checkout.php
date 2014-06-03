@@ -199,12 +199,15 @@ class Oink_Oink_Helper_Checkout
             $oinkAddress = $user->getAddress();
         }
         $quote = $this->getQuote();
-        $billingAddress = $quote->getBillingAddress();
-        $billingAddress->addData($oinkAddress->getData());
+        $billingAddress = $quote->getBillingAddress(); //street is 'array'
+        $billingAddress->addData($oinkAddress->getData()); //now street is array[0] = actual street
         $billingAddress->setPaymentMethod(self::PAYMENT_METHOD_CODE);
         $billingAddressCopy = clone $billingAddress;
         $billingAddressCopy->unsAddressId()->unsAddressType();
-        $shippingAddress = $this->getQuote()->getShippingAddress();
+        $shippingAddress = $this->getQuote()->getShippingAddress(); //street is not in array from this call
+
+        $shippingMethodCode = $this->getUser()->getData('shipping_method');
+        $shippingMethod = new Varien_Object(array("code" => $shippingMethodCode));
 
         $availableShippingMethods = $shippingAddress
             ->addData($billingAddressCopy->getData())
@@ -215,9 +218,6 @@ class Oink_Oink_Helper_Checkout
             ->save()
             ->getGroupedAllShippingRates();
 
-        $defaultShippingMethodCode = Mage::getStoreConfig("oink/merchant_info/DefaultShipmentMethod");
-
-        $shippingMethod = new Varien_Object(array("code" => $defaultShippingMethodCode));
         Mage::dispatchEvent("oink_after_set_shipping_method", array(
             "shipping_method" => $shippingMethod,
             "available_shipping_methods" => $availableShippingMethods,

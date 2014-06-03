@@ -12,6 +12,7 @@ class Oink_Oink_Model_User
 
     protected $_token;
     protected $_address;
+    protected $_arrayAddress;
     /**
      * Authenticate child and get the the result 
      * 
@@ -45,6 +46,7 @@ class Oink_Oink_Model_User
             Mage::throwException($auth->ErrorMessage);
         }
     }
+
     /**
      * Get address from Oink and change it to magento format
      * @param dtoAddress
@@ -59,7 +61,7 @@ class Oink_Oink_Model_User
             $resource=Mage::getSingleton("core/resource");
             $connection=$resource->getConnection("core_read");
             $table=$resource->getTableName("directory_country_region");
-            $query = "SELECT default_name,region_id FROM {$table} WHERE country_id='{$oinkAddress->Country}' and code='{$oinkAddress->State}'"; 
+            $query = "SELECT default_name,region_id FROM {$table} WHERE country_id='{$oinkAddress->Country}' and code='{$oinkAddress->State}'";
             $region = $connection->fetchRow($query);
 
             $this->_address = new Varien_Object(array(
@@ -77,6 +79,41 @@ class Oink_Oink_Model_User
         }
         return $this->_address;
     }
+
+    /**
+     * Get address from Oink and change it to magento format
+     * @param dtoAddress
+     * @return Varien_Object
+     */
+    public function getAddressInArray($oinkAddress=null)
+    {
+        if (is_null($this->_arrayAddress)) {
+            if(is_null($oinkAddress)){
+                $oinkAddress = $this->getAddressDto();
+            }
+            $resource=Mage::getSingleton("core/resource");
+            $connection=$resource->getConnection("core_read");
+            $table=$resource->getTableName("directory_country_region");
+            $query = "SELECT default_name,region_id FROM {$table} WHERE country_id='{$oinkAddress->Country}' and code='{$oinkAddress->State}'";
+            $region = $connection->fetchRow($query);
+
+
+            $this->_arrayAddress = new Varien_Object(array(
+                "street" => array($oinkAddress->Address),
+                "city" => $oinkAddress->City,
+                "country_id" => $oinkAddress->Country,
+                "firstname" => $this->_getFirstname($oinkAddress->ParentName),
+                "lastname" => $this->_getLastname($oinkAddress->ParentName),
+                "telephone" => (bool)$oinkAddress->Phone ? $oinkAddress->Phone : "11111111",
+                "region" => $region["default_name"],
+                "region_id" => $region["region_id"],
+                "postcode" => $oinkAddress->Zip,
+                "email" => $oinkAddress->ParentEmail,
+            ));
+        }
+        return $this->_arrayAddress;
+    }
+
     /**
      * @return Oink_Oink_Helper_Data
      */
