@@ -69,6 +69,8 @@ class Oink_Oink_CheckoutController extends Mage_Core_Controller_Front_Action
      */
     public function loginPostAction()
     {
+        Mage::getSingleton("customer/session")->unsParentConfirm();
+        Mage::getSingleton("customer/session")->unsShippingMethodSelected();
         $user = $this->getRequest()->getPost("user");
         $password = $this->getRequest()->getPost("password");
         $loginResponse = array();
@@ -168,17 +170,14 @@ class Oink_Oink_CheckoutController extends Mage_Core_Controller_Front_Action
 
     protected function _setAddress()
     {
-        $address = Mage::helper('oink/checkout')->getUser()->getAddressInArray(); //address with street as an array
+        $address = Mage::helper('oink/checkout')->getUser()->getAddress(null,true);
 
         Mage::getModel('checkout/type_onepage')->saveShipping($address->getData());
     }
 
     protected function _isShippingMethodSelected()
     {
-		method = Mage::helper('oink/checkout')->getUser()->getData('shipping_method'));
-		if (isset(method))
-			return true;
-        return false;
+        return (bool)Mage::getSingleton('customer/session')->getShippingMethodSelected();
     }
 
     protected function _placeOrder()
