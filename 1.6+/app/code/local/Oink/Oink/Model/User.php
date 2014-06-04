@@ -82,12 +82,12 @@ class Oink_Oink_Model_User
 
         if (is_null($this->_arrayAddress)) {
             $this->_arrayAddress = clone $this->_address;
-            $this->_arrayAddress['street'] = array($oinkAddress->Address);
+            $this->_arrayAddress["street"] = array($oinkAddress->Address);
         }
 
         if ($inArray)
             return $this->_arrayAddress;
-        return $this->_arrayAddress;
+        return $this->_address;
     }
 
     /**

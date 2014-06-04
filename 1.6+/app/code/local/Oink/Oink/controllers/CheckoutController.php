@@ -22,7 +22,7 @@ class Oink_Oink_CheckoutController extends Mage_Core_Controller_Front_Action
             if ($this->_isOrderReadyForConfirmation()) {
                 $this->_redirect("oink/checkout/parentConfirm");
             }
-            if (!($this->_isShippingMethodSelected())){
+            else if (!($this->_isShippingMethodSelected())){
                 $this->_setAddress();
                 $this->_redirect("oink/checkout/shippingMethod");
             } else {
@@ -53,7 +53,6 @@ class Oink_Oink_CheckoutController extends Mage_Core_Controller_Front_Action
      */
     public function shippingMethodAction()
     {
-        Mage::getSingleton("customer/session")->unsShippingMethodSelected();
         try {
             $this->loadLayout()->renderLayout();
 
@@ -70,7 +69,6 @@ class Oink_Oink_CheckoutController extends Mage_Core_Controller_Front_Action
     public function loginPostAction()
     {
         Mage::getSingleton("customer/session")->unsParentConfirm();
-        Mage::getSingleton("customer/session")->unsShippingMethodSelected();
         $user = $this->getRequest()->getPost("user");
         $password = $this->getRequest()->getPost("password");
         $loginResponse = array();
@@ -145,7 +143,6 @@ class Oink_Oink_CheckoutController extends Mage_Core_Controller_Front_Action
                 Mage::getSingleton("core/session")->addSuccess($message);
                 $path = "*/*/success";
                 Mage::getSingleton("customer/session")->unsParentConfirm();
-                Mage::getSingleton("customer/session")->unsShippingMethodSelected();
             } else {
                 $errorMessage = Mage::getSingleton("oink/errorHandler")->rewriteError($result->ErrorMessage);
                 Mage::getSingleton("core/session")->addError($errorMessage);
@@ -177,7 +174,8 @@ class Oink_Oink_CheckoutController extends Mage_Core_Controller_Front_Action
 
     protected function _isShippingMethodSelected()
     {
-        return (bool)Mage::getSingleton('customer/session')->getShippingMethodSelected();
+        $shippingMethod = Mage::helper('oink/checkout')->getUser()->getData('shipping_method');
+        return isset($shippingMethod);
     }
 
     protected function _placeOrder()
@@ -336,7 +334,6 @@ class Oink_Oink_CheckoutController extends Mage_Core_Controller_Front_Action
             Mage::helper("oink")->getUser()->addData(array(
                 "shipping_method" => $params["shipping_method"],
             ));
-            Mage::getSingleton('customer/session')->setShippingMethodSelected(true);
             $this->_redirect("*/*/index");
         }
     }

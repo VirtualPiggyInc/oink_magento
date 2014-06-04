@@ -199,12 +199,12 @@ class Oink_Oink_Helper_Checkout
             $oinkAddress = $user->getAddress();
         }
         $quote = $this->getQuote();
-        $billingAddress = $quote->getBillingAddress(); //street is 'array'
-        $billingAddress->addData($oinkAddress->getData()); //now street is array[0] = actual street
+        $billingAddress = $quote->getBillingAddress();
+        $billingAddress->addData($oinkAddress->getData());
         $billingAddress->setPaymentMethod(self::PAYMENT_METHOD_CODE);
         $billingAddressCopy = clone $billingAddress;
         $billingAddressCopy->unsAddressId()->unsAddressType();
-        $shippingAddress = $this->getQuote()->getShippingAddress(); //street is not in array from this call
+        $shippingAddress = $this->getQuote()->getShippingAddress();
 
         $shippingMethodCode = $this->getUser()->getData('shipping_method');
         $shippingMethod = new Varien_Object(array("code" => $shippingMethodCode));
