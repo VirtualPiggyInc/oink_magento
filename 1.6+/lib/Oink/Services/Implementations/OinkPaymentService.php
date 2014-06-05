@@ -338,6 +338,7 @@ class OinkPaymentService implements IPaymentService {
         $result_dto = new dtoResultObject();
         $result_dto->Status = false;
         $result_dto->ErrorMessage = "SOAP call not executed.";
+		$checkOutData = urlencode($checkOutData);
         try {
             $client = $this->GetSoapClient();
             $params = array(
@@ -364,6 +365,7 @@ class OinkPaymentService implements IPaymentService {
         $result_dto = new dtoResultObject();
         $result_dto->Status = false;
         $result_dto->ErrorMessage = "SOAP call not executed.";
+		$checkOutData = urlencode($checkOutData);
         try {
             $client = $this->GetSoapClient();
             $params = array(
