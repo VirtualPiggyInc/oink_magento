@@ -18,18 +18,19 @@ class Oink_Oink_CheckoutController extends Mage_Core_Controller_Front_Action
         } elseif (!Mage::helper("oink")->isUserLogged()) {
             Mage::getSingleton("core/session")->addError($this->__("You need to be logged in Oink."));
             $this->_redirect("checkout/cart/index");
-        } else {
-            if ($this->_isOrderReadyForConfirmation()) {
-                $this->_redirect("oink/checkout/parentConfirm");
-            }
-            else if (!($this->_isShippingMethodSelected())){
-                $this->_setAddress();
+        } else if ($this->_isOrderReadyForConfirmation()) {
+            $this->_redirect("oink/checkout/parentConfirm");
+        } else if (!($this->_isShippingMethodSelected())) {
+            $this->_setAddress();
+            if ($this->_setDefaultShippingMethod())
+                $this->_redirect("oink/checkout/index");
+            else
                 $this->_redirect("oink/checkout/shippingMethod");
-            } else {
-                Mage::helper("oink/checkout")->populateQuote();
-                $this->loadLayout()
-                    ->renderLayout();
-            }
+
+        } else {
+            Mage::helper("oink/checkout")->populateQuote();
+            $this->loadLayout()
+                ->renderLayout();
         }
     }
 
@@ -38,7 +39,7 @@ class Oink_Oink_CheckoutController extends Mage_Core_Controller_Front_Action
     */
     public function parentConfirmAction()
     {
-        Mage::getSingleton("customer/session")->unsParentConfirm();
+        $this->_reset();
         try {
             $this->loadLayout()->renderLayout();
         } catch (Exception $e) {
@@ -68,7 +69,7 @@ class Oink_Oink_CheckoutController extends Mage_Core_Controller_Front_Action
      */
     public function loginPostAction()
     {
-        Mage::getSingleton("customer/session")->unsParentConfirm();
+        $this->_reset();
         $user = $this->getRequest()->getPost("user");
         $password = $this->getRequest()->getPost("password");
         $loginResponse = array();
@@ -126,7 +127,6 @@ class Oink_Oink_CheckoutController extends Mage_Core_Controller_Front_Action
                         Oink_Oink_Helper_Checkout::ORDER_STATUS_APPROVAL_PENDING
                     );
                 } else {
-                    $message = Mage::getStoreConfig("oink/messages/success_transaction");
                     $vpCheckoutHelper->completeOrder($order);
                     $originalOrder->sendNewOrderEmail();
 
@@ -139,10 +139,8 @@ class Oink_Oink_CheckoutController extends Mage_Core_Controller_Front_Action
 
                 $order->save();
                 $originalOrder->save();
-
-                Mage::getSingleton("core/session")->addSuccess($message);
-                $path = "*/*/success";
-                Mage::getSingleton("customer/session")->unsParentConfirm();
+                $path = "oink/checkout/success";
+                $this->_reset();
             } else {
                 $errorMessage = Mage::getSingleton("oink/errorHandler")->rewriteError($result->ErrorMessage);
                 Mage::getSingleton("core/session")->addError($errorMessage);
@@ -150,7 +148,7 @@ class Oink_Oink_CheckoutController extends Mage_Core_Controller_Front_Action
             }
         } catch (Exception $e) {
             Mage::getSingleton("core/session")->addError($e->getMessage());
-            $path = "*/*/index";
+            $path = "oink/checkout/failure";
         }
 
         $this->_redirect($path);
@@ -176,6 +174,21 @@ class Oink_Oink_CheckoutController extends Mage_Core_Controller_Front_Action
     {
         $shippingMethod = Mage::helper('oink/checkout')->getUser()->getData('shipping_method');
         return isset($shippingMethod);
+    }
+
+    private function _setDefaultShippingMethod() {
+        $defaultShippingMethodCode = Mage::getStoreConfig("oink/merchant_info/DefaultShipmentMethod");
+        if (!empty($defaultShippingMethodCode)) {
+            Mage::helper("oink")->getUser()->addData(array(
+                "shipping_method" => $defaultShippingMethodCode,
+            ));
+            return true;
+        }
+        return false;
+    }
+
+    private function _reset() {
+        Mage::getSingleton("customer/session")->unsParentConfirm();
     }
 
     protected function _placeOrder()
@@ -273,6 +286,14 @@ class Oink_Oink_CheckoutController extends Mage_Core_Controller_Front_Action
      * Checkout success page
      */
     public function successAction()
+    {
+        $this->loadLayout()
+            ->renderLayout();
+    }
+    /*
+     *  Checkout failure page
+     */
+    public function failureAction()
     {
         $this->loadLayout()
             ->renderLayout();
