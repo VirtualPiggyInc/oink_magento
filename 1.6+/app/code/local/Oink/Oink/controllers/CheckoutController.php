@@ -4,8 +4,7 @@
  * @category    Oink
  * @package     Oink_Oink
  */
-class Oink_Oink_CheckoutController
-    extends Mage_Core_Controller_Front_Action
+class Oink_Oink_CheckoutController extends Mage_Core_Controller_Front_Action
 {
 
     /**
@@ -19,25 +18,45 @@ class Oink_Oink_CheckoutController
         } elseif (!Mage::helper("oink")->isUserLogged()) {
             Mage::getSingleton("core/session")->addError($this->__("You need to be logged in Oink."));
             $this->_redirect("checkout/cart/index");
+        } else if ($this->_isOrderReadyForConfirmation()) {
+            $this->_redirect("oink/checkout/parentConfirm");
+        } else if (!($this->_isShippingMethodSelected())) {
+            $this->_setAddress();
+            if ($this->_setDefaultShippingMethod())
+                $this->_redirect("oink/checkout/index");
+            else
+                $this->_redirect("oink/checkout/shippingMethod");
+
         } else {
-            if ($this->_isOrderReadyForConfirmation()) {
-                $this->_redirect("oink/checkout/parentConfirm");
-            } else {
-                Mage::helper("oink/checkout")->populateQuote();
-                $this->loadLayout()
-                    ->renderLayout();
-            }
+            Mage::helper("oink/checkout")->populateQuote();
+            $this->loadLayout()
+                ->renderLayout();
         }
     }
 
     /**
-     * Parent Confirmation page
-     */
+    * Parent Confirmation page
+    */
     public function parentConfirmAction()
     {
-        Mage::getSingleton("customer/session")->unsParentConfirm();
+        $this->_reset();
         try {
             $this->loadLayout()->renderLayout();
+        } catch (Exception $e) {
+            $errorMessage = Mage::getSingleton("oink/errorHandler")->rewriteError($e->getMessage());
+            Mage::getSingleton("core/session")->addError($errorMessage);
+            $this->_redirect("checkout/cart/index");
+        }
+    }
+
+    /**
+     * Shipping method page
+     */
+    public function shippingMethodAction()
+    {
+        try {
+            $this->loadLayout()->renderLayout();
+
         } catch (Exception $e) {
             $errorMessage = Mage::getSingleton("oink/errorHandler")->rewriteError($e->getMessage());
             Mage::getSingleton("core/session")->addError($errorMessage);
@@ -50,12 +69,12 @@ class Oink_Oink_CheckoutController
      */
     public function loginPostAction()
     {
+        $this->_reset();
         $user = $this->getRequest()->getPost("user");
         $password = $this->getRequest()->getPost("password");
         $loginResponse = array();
         try {
             $loginResponse["response"] = (bool)Mage::helper("oink")->authenticateUser($user, $password);
-
         } catch (Exception $e) {
             if (strpos($e->getMessage(), "temporarily disabled") !== false) {
                 $loginResponse["errorMessage"] = Mage::getStoreConfig("oink/messages/max_login_attemps");
@@ -108,7 +127,6 @@ class Oink_Oink_CheckoutController
                         Oink_Oink_Helper_Checkout::ORDER_STATUS_APPROVAL_PENDING
                     );
                 } else {
-                    $message = Mage::getStoreConfig("oink/messages/success_transaction");
                     $vpCheckoutHelper->completeOrder($order);
                     $originalOrder->sendNewOrderEmail();
 
@@ -121,10 +139,8 @@ class Oink_Oink_CheckoutController
 
                 $order->save();
                 $originalOrder->save();
-
-                Mage::getSingleton("core/session")->addSuccess($message);
-                $path = "*/*/success";
-                Mage::getSingleton("customer/session")->unsParentConfirm();
+                $path = "oink/checkout/success";
+                $this->_reset();
             } else {
                 $errorMessage = Mage::getSingleton("oink/errorHandler")->rewriteError($result->ErrorMessage);
                 Mage::getSingleton("core/session")->addError($errorMessage);
@@ -132,7 +148,7 @@ class Oink_Oink_CheckoutController
             }
         } catch (Exception $e) {
             Mage::getSingleton("core/session")->addError($e->getMessage());
-            $path = "*/*/index";
+            $path = "oink/checkout/failure";
         }
 
         $this->_redirect($path);
@@ -147,13 +163,40 @@ class Oink_Oink_CheckoutController
         && !(bool)Mage::getSingleton("customer/session")->getParentConfirm();
     }
 
+    protected function _setAddress()
+    {
+        $address = Mage::helper('oink/checkout')->getUser()->getAddress(null,true);
+
+        Mage::getModel('checkout/type_onepage')->saveShipping($address->getData());
+    }
+
+    protected function _isShippingMethodSelected()
+    {
+        $shippingMethod = Mage::helper('oink/checkout')->getUser()->getData('shipping_method');
+        return isset($shippingMethod);
+    }
+
+    private function _setDefaultShippingMethod() {
+        $defaultShippingMethodCode = Mage::getStoreConfig("oink/merchant_info/DefaultShipmentMethod");
+        if (!empty($defaultShippingMethodCode)) {
+            Mage::helper("oink")->getUser()->addData(array(
+                "shipping_method" => $defaultShippingMethodCode,
+            ));
+            return true;
+        }
+        return false;
+    }
+
+    private function _reset() {
+        Mage::getSingleton("customer/session")->unsParentConfirm();
+    }
+
     protected function _placeOrder()
     {
         $quote = $this->_prepareGuestQuote();
 
         $service = Mage::getModel('sales/service_quote', $quote);
         $service->submitAll();
-
         $checkoutSession = $this->getCheckout();
 
         $checkoutSession->setLastQuoteId($quote->getId())
@@ -247,6 +290,14 @@ class Oink_Oink_CheckoutController
         $this->loadLayout()
             ->renderLayout();
     }
+    /*
+     *  Checkout failure page
+     */
+    public function failureAction()
+    {
+        $this->loadLayout()
+            ->renderLayout();
+    }
 
     /*
     * Quick Connect page
@@ -285,7 +336,28 @@ class Oink_Oink_CheckoutController
             $this->_redirect("*/*/index");
         }
     }
-
+    /**
+     * Process Shipping Method page
+     */
+    public function processShippingMethodAction()
+    {
+        $params = $this->getRequest()->getParams();
+        $errors = array();
+        if (!isset ($params["shipping_method"])) {
+            $errors[] = $this->__("You need to select a shipping method");
+        }
+        if ((bool)count($errors)) {
+            foreach ($errors as $error) {
+                Mage::getSingleton("core/session")->addError($error);
+            }
+            $this->_redirect("*/*/shippingMethod");
+        } else {
+            Mage::helper("oink")->getUser()->addData(array(
+                "shipping_method" => $params["shipping_method"],
+            ));
+            $this->_redirect("*/*/index");
+        }
+    }
     /**
      * Prepare quote for guest checkout order submit
      *

@@ -206,6 +206,9 @@ class Oink_Oink_Helper_Checkout
         $billingAddressCopy->unsAddressId()->unsAddressType();
         $shippingAddress = $this->getQuote()->getShippingAddress();
 
+        $shippingMethodCode = $this->getUser()->getData('shipping_method');
+        $shippingMethod = new Varien_Object(array("code" => $shippingMethodCode));
+
         $availableShippingMethods = $shippingAddress
             ->addData($billingAddressCopy->getData())
             ->setSameAsBilling(1)
@@ -215,9 +218,6 @@ class Oink_Oink_Helper_Checkout
             ->save()
             ->getGroupedAllShippingRates();
 
-        $defaultShippingMethodCode = Mage::getStoreConfig("oink/merchant_info/DefaultShipmentMethod");
-
-        $shippingMethod = new Varien_Object(array("code" => $defaultShippingMethodCode));
         Mage::dispatchEvent("oink_after_set_shipping_method", array(
             "shipping_method" => $shippingMethod,
             "available_shipping_methods" => $availableShippingMethods,
@@ -238,7 +238,7 @@ class Oink_Oink_Helper_Checkout
         $totals = $quote->getTotals();
         $user = $this->getUser();
         if (!isset ($totals["shipping"])) {
-            Mage::throwException(Mage::getStoreConfig("oink/messages/shipping_error"));
+            Mage::getSingleton('checkout/session')->setErrorMessage(Mage::getStoreConfig("oink/messages/shipping_error"));
         }
         $cart = Mage::helper("oink")->getDtoCart();
         if ((bool)$user->getDeliverToChildren()) {
