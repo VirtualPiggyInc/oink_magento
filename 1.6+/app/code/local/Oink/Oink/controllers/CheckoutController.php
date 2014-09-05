@@ -287,6 +287,8 @@ class Oink_Oink_CheckoutController extends Mage_Core_Controller_Front_Action
      */
     public function successAction()
     {
+        $lastOrderId = $this->getCheckout()->getLastOrderId();
+        Mage::dispatchEvent('checkout_onepage_controller_success_action', array('order_ids' => array($lastOrderId)));
         $this->loadLayout()
             ->renderLayout();
     }
