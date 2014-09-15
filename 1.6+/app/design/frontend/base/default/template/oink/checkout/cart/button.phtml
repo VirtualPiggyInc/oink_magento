@@ -6,7 +6,7 @@ if(Mage::helper("oink/checkout")->isEnabled()) { ?>
     document.observe("dom:loaded", function() {
             if (this.body.hasClassName('onestepcheckout-index-index')) {
                 var button = this.getElementById('oink-cart-button');
-                this.getElementsByClassName('payment-methods')[0].insert(button);
+                button.style.display = "none";
             }
         });
     </script>

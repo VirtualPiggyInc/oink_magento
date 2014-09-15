@@ -42,7 +42,7 @@
         margin-right: auto;
         width:180px;
         height:253px;
-        padding: 10px 10px 0px 15px;
+        padding: 50px 10px 0px 15px;
         vertical-align:top;
         background-color: #F3F3F3;
         border-radius: 4px;
@@ -50,11 +50,9 @@
 
     .dim
     {
-        background-color: white;
         filter:alpha(opacity=50); /* IE */
         opacity: 0.5; /* Safari, Opera */
         -moz-opacity:0.50; /* FireFox */
-        z-index: 20;
     }
 
     #oink-login #vp-close {
@@ -123,7 +121,7 @@
         background-color: white;
         box-shadow: 3px 0px 5px -2px rgba(0, 0, 0, 0.25);
         padding: 0px 20px 0px 20px;
-        height:300px;
+        height:303px;
         border-top-left-radius:4px;
         border-bottom-left-radius:4px;
     }
@@ -149,6 +147,60 @@
         border-radius: 4px;
         background-color: #F3F3F3;
     }
+    #oink-close {
+        float:right;
+        padding-top:10px;
+        position: relative;
+        left:10px;
+    }
+    .spinner {
+        text-align: center;
+        display:none;
+        border-radius:4px;
+        margin:0;
+        width: 350px;
+    }
+
+    .spinner img {
+        width: 54px;
+        height: 54px;
+        margin-top: 55px;
+        margin-bottom: 10px;
+
+        -webkit-transition-property: -webkit-transform;
+        -webkit-transition-duration: 1s;
+        -moz-transition-property: -moz-transform;
+        -moz-transition-duration: 1s;
+        -webkit-animation-name: spinner-rotate;
+        -webkit-animation-duration: 1s;
+        -webkit-animation-iteration-count: infinite;
+        -webkit-animation-timing-function: linear;
+        -moz-animation-name: spinner-rotate;
+        -moz-animation-duration: 1s;
+        -moz-animation-iteration-count: infinite;
+        -moz-animation-timing-function: linear;
+    }
+
+    @-webkit-keyframes spinner-rotate {
+        from {-webkit-transform: rotate(0deg);}
+        to {-webkit-transform: rotate(360deg);}
+    }
+
+    @-moz-keyframes spinner-rotate {
+        from {-moz-transform: rotate(0deg);}
+        to {-moz-transform: rotate(360deg);}
+    }
+
+    .spinner h3 {
+        margin-bottom: 5px;
+
+        font-size: 1.3em;
+    }
+
+    .spinner p {
+        margin: 0;
+    }
+
 </style>
 
 <?php $skinUrl = $this->getSkinUrl('images/oink/checkout/'); ?>
@@ -161,15 +213,11 @@
 
 <div id="oink-modal" align="center" style="display:none;">
     <div align="left" class="oink-block">
-        <!-- x //-->
-        <div style="float:right;padding:10px;"><a style="text-decoration:none;cursor:pointer;" onClick="return closePopup()"><img src="<?php echo $skinUrl; ?>x.png" /></a></div>
-
         <!-- left col -->
-
-
         <div id="oink-login" align="center">
+            <div id="oink-close"><a style="text-decoration:none;cursor:pointer;" onClick="return closePopup()"><img src="<?php echo $skinUrl; ?>x.png" /></a></div>
+            <img src="//cdn.virtualpiggy.com/public/images/checkout-logo-192x75.png" height="80" style="padding-top:20px; padding-bottom:20px;"/>
             <form id="oink-checkout">
-                <img src="//cdn.virtualpiggy.com/public/images/checkout-logo-192x75.png" height="80" style="padding-top:20px; padding-bottom:20px;"/>
                 <div align="center" style="padding-top:10px;">
                     <input class="textBox required-entry" onkeypress="bindOinkLoginPost(event)" id="oink-login-userid" name="UserName" tabindex="2" type="text" placeholder="Username" />
                 </div>
@@ -180,26 +228,23 @@
                     <button onclick="return oinkLoginForm.submit();" id="login-form-button" class="oink-button" type="button">Login</button>
                 </div>
             </form>
+
             <a href="//users.virtualpiggy.com/registration" target="_blank" id="sign-up-button" class="oink-button">Sign Up</a>
+            <div id="oink-loading" class="spinner page">
+                <img src="<?php echo $skinUrl; ?>spinner.png" alt="" />
+            </div>
+        </div>
     </div>
-</div>
     <div align="right" style="margin:0px; background-color:#F3F3F3; border-radius:4px;">
         <div id="info-panel" align="center">
             <div>
                 <span class="oink-h2">What is Oink?</span>
             </div>
             <div style="padding-top:15px;">
-                <span style="font-size:10pt;font-family:"helvetica neue regular";color:#444;line-height:10px;">Oink is the safe way for kids and teens to save, shop and give online.</span>
+                <span style="font-size:10pt;color:#444;">Oink is the safe way for kids and teens to save, shop and give online.</span>
             </div>
-            <div style="padding-top:63px;">
+            <div style="padding-top:60px">
                 <a href="//www.oink.com/" target="_blank" class="oink-note">Learn More</a>
-            </div>
-        </div>
-        <div id="oink-loading" style="vertical-align:top;display:none;border-radius:4px;margin:0px;background-color:white">
-            <div align="center">
-                <img src="https://cdn.virtualpiggy.com/public/images/checkout-logo-192x75.png" height="80" style="padding-bottom:20px;"/>
-                <div align="center" class="oink-h2" style="width:220px;padding-top:15px;"><span><?php echo Mage::helper('adminhtml')->__('Please wait while you are logged in...') ?></span></div>
-                <div align="center" style="padding-top:20px; padding-bottom:20px;"><img src="<?php echo $this->getSkinUrl('images/oink/login/loader.gif') ?>" alt="<?php echo Mage::helper('adminhtml')->__('Loading...') ?>"/></div>
             </div>
         </div>
     </div>
@@ -209,6 +254,33 @@
 <input type="hidden" id="oink-checkout-url" value="<?php echo $this->getCheckoutUrl() ?>"/>
 <script type="text/javascript">
     //<![CDATA[
+    function showSpinner() {
+        $('oink-checkout').setStyle({ display: 'none'});
+        $('oink-login').setStyle({backgroundColor: '#BBBBBB'}).addClassName('dim');
+        $('oink-loading').setStyle({ display: 'block'});
+        $('sign-up-button').setStyle({ display: 'none'});
+        return false;
+    }
+
+    function hideSpinner() {
+        $('oink-loading').setStyle({ display: 'none'});
+        $('oink-checkout').setStyle({ display: 'block'});
+        $('oink-login').setStyle({backgroundColor: 'white'}).removeClassName('dim');
+        $('sign-up-button').setStyle({ display: 'inline-block'});
+    }
+
+    function closePopup(){
+        if($('p_method_oink'))$('p_method_oink').checked=false;
+        Dialog.cancelCallback();
+        return false;
+    }
+
+    function bindOinkLoginPost(evt){
+        if (evt.keyCode == Event.KEY_RETURN) {
+            oinkLoginForm.submit();
+        }
+    }
+
     if ("payment" in window)
     {
         var oldSwitchMethod=payment.switchMethod;
@@ -220,23 +292,9 @@
             }
         }
     }
-    // if($('p_method_oink')){
-    //    $('p_method_oink').onclick=function(){
-    //      oinkLoginForm.submit();
-    //     }
-    // }
-    function closePopup(){
-        if($('p_method_oink'))$('p_method_oink').checked=false;
-        Dialog.cancelCallback();
-        return false;
-    }
 
     var oinkLoginForm = new VarienForm('oink-modal', true);
-    function bindOinkLoginPost(evt){
-        if (evt.keyCode == Event.KEY_RETURN) {
-            oinkLoginForm.submit();
-        }
-    }
+
     oinkLoginForm.toggleTooltip=function(){
         if($$(".dialog").length){
             return false;
@@ -244,12 +302,29 @@
         if($('p_method_oink')){
             $('p_method_oink').checked=1;
         }
-        Dialog.info($('oink-modal').innerHTML, {
-            className:"magento",
-            width:600,
-            height:300,
-            top: 175
-        });
+        if (screen.width < 700 || screen.height < 400) {
+            $('info-panel').setStyle({ display: 'none'});
+            $('sign-up-button').setStyle({ display: 'none'});
+            $('oink-login').setStyle({ borderRadius: '4px', boxShadow: 'none'});
+            Dialog.info($('oink-modal').innerHTML, {
+                className:"magento",
+                width: 370,
+                height:300,
+                top: 0,
+                left: ((screen.width - (370))/2),
+                recenterAuto:true
+            });
+        } else {
+            Dialog.info($('oink-modal').innerHTML, {
+                className:"magento",
+                width:600,
+                height:300,
+                top: ((window.innerHeight - 300)/2),
+                left: ((window.innerWidth - 600)/2),
+                recenterAuto:true
+            });
+            $('oink-close').setStyle({ left: '220px'});
+        }
         return false;
     }
 
@@ -266,10 +341,8 @@
                 },
 
                 onCreate:function() {
-                    $('oink-login').setStyle({ display: 'none'});
-                    $('info-panel').setStyle({display: 'none'});
-                    $('login-form-button').innerHTML = '<img src="<?php echo $skinUrl; ?>login.png" />';
-                    $('oink-loading').setStyle({ display: 'inline-block', width: '600px'});
+                    $('info-panel').addClassName('dim');
+                    showSpinner();
                 },
 
                 onComplete:function(){},
@@ -282,10 +355,13 @@
                         $('oink-errors-container').innerHTML = '';
                     } else
                     {
+                        hideSpinner();
                         $('oink-errors-container').innerHTML = json.errorMessage;
-                        $('oink-loading').setStyle({ display: 'none'});
                         $('oink-login').setStyle({ display: 'inline-block'});
-                        $('info-panel').setStyle({display: 'inline-block'}).removeClassName('dim');
+
+                        if (screen.width >= 700 || screen.height >= 400) {
+                            $('info-panel').setStyle({display: 'inline-block'}).removeClassName('dim');
+                        }
                         $('login-form-button').innerHTML = '<button onclick="return oinkLoginForm.submit();" id="login-form-button" class="oink-button" type="button">Login</button>';
                     }
                 }
